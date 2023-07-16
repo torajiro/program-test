@@ -5,16 +5,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class DpTable {
-    public static final Integer ARTICLE_WEIGHT_FLG = 0;
-    public static final Integer ARTICLE_VALUE_FLG = 1;
-    public static final Integer TOTAL_WEIGHT_LOWER_LIMIT = 1;
-    public static final Integer TOTAL_WEIGHT_UPPER_LIMIT = 10000;
-    public static final Integer ARTICLE_WEIGHT_LOWER_LIMIT = 1;
-    public static final Integer ARTICLE_WEIGHT_UPPER_LIMIT = 1000;
-    public static final Integer ARTICLE_VALUE_LOWER_LIMIT = 1;
-    public static final Integer ARTICLE_VALUE_UPPER_LIMIT = 1000;
-    public static final Integer ARTICLE_CAPACITY_LOWER_LIMIT = 1;
-    public static final Integer ARTICLE_CAPACITY_UPPER_LIMIT = 100;
 
     private Integer totalWeightLimit;
     private final Map<Integer, Integer> table = new HashMap<>();
@@ -29,11 +19,11 @@ public class DpTable {
     }
 
     private void init(Integer weightLimit, boolean isDebug) {
-        if (weightLimit < TOTAL_WEIGHT_LOWER_LIMIT) {
+        if (weightLimit < Const.TOTAL_WEIGHT_LOWER_LIMIT) {
             throw new IllegalArgumentException("TOTAL WEIGHT LOWER LIMIT");
         }
 
-        if (weightLimit > TOTAL_WEIGHT_UPPER_LIMIT) {
+        if (weightLimit > Const.TOTAL_WEIGHT_UPPER_LIMIT) {
             throw new IllegalArgumentException("TOTAL WEIGHT UPPER LIMIT");
         }
 

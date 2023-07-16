@@ -16,6 +16,15 @@ public class DpTableTest {
     }
 
     /** 重さの総和の最大値を9にした場合、正解が12になるテストデータを作成 */
+    private ArrayList<Pair> testData0() {
+        ArrayList<Pair> list = new ArrayList<>();
+        list.add(this.getTestArticle(9, 15));
+        list.add(this.getTestArticle(6, 10));
+        list.add(this.getTestArticle(4, 6));
+        return list;
+    }
+
+    /** 重さの総和の最大値を9にした場合、正解が12になるテストデータを作成 */
     private ArrayList<Pair> testData1() {
         ArrayList<Pair> list = new ArrayList<>();
         list.add(this.getTestArticle(1, 2));
@@ -30,14 +39,12 @@ public class DpTableTest {
      * ランダムで最大容量のデータを生成
      */
     private ArrayList<Pair> testData2() {
-        Integer maxCapacity = DpTable.ARTICLE_CAPACITY_UPPER_LIMIT;
+        Integer maxCapacity = Const.ARTICLE_CAPACITY_UPPER_LIMIT;
 
         ArrayList<Pair> list = new ArrayList<>();
         for (int i = 0; i < maxCapacity; i++) {
-            Integer weight = this.getRandomNumber(
-                    DpTable.ARTICLE_WEIGHT_LOWER_LIMIT,
-                    DpTable.ARTICLE_WEIGHT_UPPER_LIMIT);
-            Integer value = this.getRandomNumber(DpTable.ARTICLE_VALUE_LOWER_LIMIT, DpTable.ARTICLE_VALUE_UPPER_LIMIT);
+            Integer weight = this.getRandomNumber(Const.ARTICLE_WEIGHT_LOWER_LIMIT, Const.ARTICLE_WEIGHT_UPPER_LIMIT);
+            Integer value = this.getRandomNumber(Const.ARTICLE_VALUE_LOWER_LIMIT, Const.ARTICLE_VALUE_UPPER_LIMIT);
             list.add(this.getTestArticle(weight, value));
         }
 
@@ -45,7 +52,25 @@ public class DpTableTest {
     }
 
     @Test
-    public void 価値の総和の最大値が合っているか() {
+    public void 価値の総和の最大値が合っているかA() {
+        boolean dbg = false;
+        Integer correct = 16; // 正解をこの値に設定
+        Integer totalWeightUpperLimit = 10; // 重さの総和の最大値をこの値に設定
+        DpTable dp = new DpTable(totalWeightUpperLimit, dbg);
+        ArrayList<Pair> testData = this.testData0();
+        Integer capacity = testData.size();
+        Integer result = dp.calc(capacity, testData);
+
+        if (!Objects.equals(correct, result))
+            fail("correct: " + correct + " / anser:" + result);
+
+        final String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+        System.out.println(methodName + " - passed");
+        System.out.println("result: " + result + ", correct: " + correct);
+    }
+
+    @Test
+    public void 価値の総和の最大値が合っているかB() {
         boolean dbg = false;
         Integer correct = 12; // 正解をこの値に設定
         Integer totalWeightUpperLimit = 9; // 重さの総和の最大値をこの値に設定
@@ -66,7 +91,7 @@ public class DpTableTest {
     public void 性能試験() {
         boolean dbg = false;
         Integer limitMilliSec = 1000; // 制限時間を1秒に設定
-        Integer totalWeightUpperLimit = DpTable.TOTAL_WEIGHT_UPPER_LIMIT;
+        Integer totalWeightUpperLimit = Const.TOTAL_WEIGHT_UPPER_LIMIT;
 
         long startTime = System.nanoTime();
 
