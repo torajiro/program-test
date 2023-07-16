@@ -47,7 +47,7 @@ public class DpTableTest {
     @Test
     public void 価値の総和の最大値が合っているか() {
         boolean dbg = true;
-        Integer correct = 12; // これが正解
+        Integer correct = 12; // 正解をこの値に設定
         Integer totalWeightUpperLimit = 9; // 重さの総和の最大値をこの値に設定
         DpTable dp = new DpTable(totalWeightUpperLimit, dbg);
         ArrayList<Pair> testData = this.testData1();
