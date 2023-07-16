@@ -34,7 +34,7 @@ public class DpTableTest {
         return list;
     }
 
-    /** 重さの総和の最大値を2921にした場合、正解が3657162058Lになるテストデータを作成(atcorderより借用) */
+    /** 重さの総和の最大値を2921にした場合、正解が3657162058Lになるテストデータを作成 */
     private ArrayList<Pair> testData2() {
         ArrayList<Pair> list = new ArrayList<>();
         list.add(this.getTestArticle(325, 981421680));
