@@ -58,7 +58,8 @@ public class DpTableTest {
             fail("correct: " + correct + " / anser:" + result);
 
         final String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
-        System.out.println(methodName + " - passed, result: " + result);
+        System.out.println(methodName + " - passed");
+        System.out.println("result: " + result + ", correct: " + correct);
     }
 
     @Test
