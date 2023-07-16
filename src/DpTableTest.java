@@ -34,13 +34,28 @@ public class DpTableTest {
         return list;
     }
 
+    /** 重さの総和の最大値を2921にした場合、正解が3657162058Lになるテストデータを作成(atcorderより借用) */
+    private ArrayList<Pair> testData2() {
+        ArrayList<Pair> list = new ArrayList<>();
+        list.add(this.getTestArticle(325, 981421680));
+        list.add(this.getTestArticle(845, 515936168));
+        list.add(this.getTestArticle(371, 17309336));
+        list.add(this.getTestArticle(112, 788067075));
+        list.add(this.getTestArticle(96, 104855562));
+        list.add(this.getTestArticle(960, 494541604));
+        list.add(this.getTestArticle(161, 32007355));
+        list.add(this.getTestArticle(581, 772339969));
+        list.add(this.getTestArticle(248, 55112800));
+        list.add(this.getTestArticle(22, 98577050));
+        return list;
+    }
+
     /**
      * 負荷テスト用データ
      * ランダムで最大容量のデータを生成
      */
-    private ArrayList<Pair> testData2() {
+    private ArrayList<Pair> testData3() {
         Integer maxCapacity = Const.ARTICLE_CAPACITY_UPPER_LIMIT;
-
         ArrayList<Pair> list = new ArrayList<>();
         for (int i = 0; i < maxCapacity; i++) {
             Integer weight = this.getRandomNumber(Const.ARTICLE_WEIGHT_LOWER_LIMIT, Const.ARTICLE_WEIGHT_UPPER_LIMIT);
@@ -51,15 +66,29 @@ public class DpTableTest {
         return list;
     }
 
+    private long getTestResult(Boolean dbg, ArrayList<Pair> testData, Integer totalWeight,
+            Integer totalWeightLowerLimit,
+            Integer totalWeightUpperLimit) {
+        Config config = new Config(
+                totalWeight,
+                totalWeightLowerLimit,
+                totalWeightUpperLimit);
+        DpTable dp = new DpTable(config, dbg);
+        Integer capacity = testData.size();
+        return dp.calc(capacity, testData);
+    }
+
     @Test
     public void 価値の総和の最大値が合っているかA() {
         boolean dbg = false;
-        Integer correct = 16; // 正解をこの値に設定
-        Integer totalWeightUpperLimit = 10; // 重さの総和の最大値をこの値に設定
-        DpTable dp = new DpTable(totalWeightUpperLimit, dbg);
-        ArrayList<Pair> testData = this.testData0();
-        Integer capacity = testData.size();
-        Integer result = dp.calc(capacity, testData);
+        long correct = 16; // 正解値
+        Integer totalWeight = 10; // 重さの総和の最大値をこの値に設定
+        long result = this.getTestResult(
+                dbg,
+                this.testData0(),
+                totalWeight,
+                Const.TOTAL_WEIGHT_LOWER_LIMIT,
+                Const.TOTAL_WEIGHT_UPPER_LIMIT);
 
         if (!Objects.equals(correct, result))
             fail("correct: " + correct + " / anser:" + result);
@@ -72,12 +101,34 @@ public class DpTableTest {
     @Test
     public void 価値の総和の最大値が合っているかB() {
         boolean dbg = false;
-        Integer correct = 12; // 正解をこの値に設定
-        Integer totalWeightUpperLimit = 9; // 重さの総和の最大値をこの値に設定
-        DpTable dp = new DpTable(totalWeightUpperLimit, dbg);
-        ArrayList<Pair> testData = this.testData1();
-        Integer capacity = testData.size();
-        Integer result = dp.calc(capacity, testData);
+        long correct = 12; // 正解値
+        Integer totalWeight = 9; // 重さの総和の最大値をこの値に設定
+        long result = this.getTestResult(
+                dbg,
+                this.testData1(),
+                totalWeight,
+                Const.TOTAL_WEIGHT_LOWER_LIMIT,
+                Const.TOTAL_WEIGHT_UPPER_LIMIT);
+
+        if (!Objects.equals(correct, result))
+            fail("correct: " + correct + " / anser:" + result);
+
+        final String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+        System.out.println(methodName + " - passed");
+        System.out.println("result: " + result + ", correct: " + correct);
+    }
+
+    @Test
+    public void 価値の総和の最大値が合っているかC() {
+        boolean dbg = false;
+        long correct = 3657162058L; // 正解値
+        Integer totalWeight = 2921; // 重さの総和の最大値をこの値に設定
+        long result = this.getTestResult(
+                dbg,
+                this.testData2(),
+                totalWeight,
+                Const.TOTAL_WEIGHT_LOWER_LIMIT,
+                totalWeight + 1);
 
         if (!Objects.equals(correct, result))
             fail("correct: " + correct + " / anser:" + result);
@@ -91,14 +142,18 @@ public class DpTableTest {
     public void 性能試験() {
         boolean dbg = false;
         Integer limitMilliSec = 1000; // 制限時間を1秒に設定
-        Integer totalWeightUpperLimit = Const.TOTAL_WEIGHT_UPPER_LIMIT;
+        Integer totalWeight = Const.TOTAL_WEIGHT_UPPER_LIMIT;
 
         long startTime = System.nanoTime();
 
-        DpTable dp = new DpTable(totalWeightUpperLimit, dbg);
-        ArrayList<Pair> testData = this.testData2();
+        Config config = new Config(
+                totalWeight,
+                Const.TOTAL_WEIGHT_LOWER_LIMIT,
+                Const.TOTAL_WEIGHT_UPPER_LIMIT);
+        DpTable dp = new DpTable(config, dbg);
+        ArrayList<Pair> testData = this.testData3();
         Integer capacity = testData.size();
-        Integer result = dp.calc(capacity, testData);
+        long result = dp.calc(capacity, testData);
 
         long endTime = System.nanoTime();
 

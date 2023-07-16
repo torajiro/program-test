@@ -6,40 +6,35 @@ import java.util.Set;
 
 public class DpTable {
 
-    private Integer totalWeightLimit;
-    private final Map<Integer, Integer> table = new HashMap<>();
+    private long totalWeightLimit;
+    private Config config;
+    private final Map<Long, Long> table = new HashMap<>();
     private boolean enableDebug = false;
 
-    public DpTable(Integer weightLimit) {
-        this.init(weightLimit, false);
+    public DpTable(Config config) {
+        this.config = config;
+        this.init(this.config, false);
     }
 
-    public DpTable(Integer weightLimit, boolean isDebug) {
-        this.init(weightLimit, isDebug);
+    public DpTable(Config config, boolean isDebug) {
+        this.config = config;
+        this.init(this.config, isDebug);
     }
 
-    private void init(Integer weightLimit, boolean isDebug) {
-        if (weightLimit < Const.TOTAL_WEIGHT_LOWER_LIMIT) {
-            throw new IllegalArgumentException("TOTAL WEIGHT LOWER LIMIT");
-        }
-
-        if (weightLimit > Const.TOTAL_WEIGHT_UPPER_LIMIT) {
-            throw new IllegalArgumentException("TOTAL WEIGHT UPPER LIMIT");
-        }
-
-        this.totalWeightLimit = weightLimit;
+    private void init(Config config, boolean isDebug) {
+        this.totalWeightLimit = config.getTotalWeight();
         this.enableDebug = isDebug;
-        this.table.put(0, 0);
+        this.table.put(0L, 0L);
     }
 
     private void update(Integer w, Integer v) {
         if (this.enableDebug)
             System.out.println(">> weight:" + w + ", value:" + v);
 
-        Set<Integer> knownData = new HashSet<Integer>();
+        Set<Long> knownData = new HashSet<Long>();
 
-        for (int i = 0; i <= this.totalWeightLimit; i++) {
-            Integer targetWeight = i + w;
+        for (long i = 0; i <= this.totalWeightLimit; i++) {
+            long targetWeight = i + w;
 
             if (targetWeight > this.totalWeightLimit)
                 continue;
@@ -50,10 +45,10 @@ public class DpTable {
             if (knownData.contains(i))
                 continue;
 
-            Integer currentValue = this.table.get(i);
-            Integer afterValue = currentValue + v;
+            long currentValue = this.table.get(i);
+            long afterValue = currentValue + v;
 
-            Integer beforeValue = 0;
+            long beforeValue = 0;
             if (this.table.containsKey(targetWeight))
                 beforeValue = this.table.get(targetWeight);
 
@@ -65,13 +60,13 @@ public class DpTable {
         }
     }
 
-    private Integer maxValue() {
-        Integer result = 0;
-        for (int i = 0; i <= this.totalWeightLimit; i++) {
+    private long getMaxValue() {
+        long result = 0;
+        for (long i = 0; i <= this.totalWeightLimit; i++) {
             if (this.table.containsKey(i) == false)
                 continue;
 
-            Integer currentValue = this.table.get(i);
+            Long currentValue = this.table.get(i);
             if (result < currentValue)
                 result = currentValue;
         }
@@ -79,7 +74,7 @@ public class DpTable {
         return result;
     }
 
-    public Integer calc(Integer capacity, ArrayList<Pair> weightAndValueList) {
+    public long calc(Integer capacity, ArrayList<Pair> weightAndValueList) {
         for (int i = 0; i < capacity; i++) {
             Pair article = weightAndValueList.get(i);
             Integer weight = article.getWeight();
@@ -87,6 +82,6 @@ public class DpTable {
             this.update(weight, value);
         }
 
-        return this.maxValue();
+        return this.getMaxValue();
     }
 }
