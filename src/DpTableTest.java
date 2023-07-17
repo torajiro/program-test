@@ -144,7 +144,7 @@ public class DpTableTest {
             fail("制限時間を超えました。処理時間：" + progressTotalTime + " ミリ秒");
 
         final String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
-        System.out.println("result: " + result + ", procTime(ms): " + ((endTime - startTime) / 1000 / 1000));
         System.out.println(methodName + " - passed");
+        System.out.println("result: " + result + ", procTime(ms): " + ((endTime - startTime) / 1000 / 1000));
     }
 }
