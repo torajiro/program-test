@@ -24,7 +24,7 @@ public class DpTableTest {
         return random.nextInt(0 + max) + min;
     }
 
-    /** 重さの総和の最大値を9にした場合、正解が12になるテストデータを作成 */
+    /** 重さの総和の最大値を10にした場合、正解が16になるテストデータを作成 */
     private ArrayList<Pair> testData0() {
         final ArrayList<Pair> list = new ArrayList<>();
         list.add(this.getTestArticle(9, 15));
