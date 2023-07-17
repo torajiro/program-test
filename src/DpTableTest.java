@@ -77,17 +77,12 @@ public class DpTableTest {
         return list;
     }
 
-    private long getTestResult(ArrayList<Pair> testData, Integer totalWeight) {
-        final DpTable dp = new DpTable(totalWeight);
-        final Integer capacity = testData.size();
-        return dp.calc(capacity, testData);
-    }
-
     @Test
     public void 価値の総和の最大値が合っているかA() {
         final long correct = 16; // 正解値
         final Integer totalWeight = 10; // 重さの総和の最大値をこの値に設定
-        final long result = this.getTestResult(this.testData0(), totalWeight);
+        final DpTable dp = new DpTable(totalWeight);
+        final long result = dp.calc(this.testData0());
 
         if (!Objects.equals(correct, result))
             fail("correct: " + correct + " / anser:" + result);
@@ -101,7 +96,8 @@ public class DpTableTest {
     public void 価値の総和の最大値が合っているかB() {
         final long correct = 12; // 正解値
         final Integer totalWeight = 9; // 重さの総和の最大値をこの値に設定
-        final long result = this.getTestResult(this.testData1(), totalWeight);
+        final DpTable dp = new DpTable(totalWeight);
+        final long result = dp.calc(this.testData1());
 
         if (!Objects.equals(correct, result))
             fail("correct: " + correct + " / anser:" + result);
@@ -115,7 +111,8 @@ public class DpTableTest {
     public void 価値の総和の最大値が合っているかC() {
         final long correct = 3657162058L; // 正解値
         final Integer totalWeight = 2921; // 重さの総和の最大値をこの値に設定
-        final long result = this.getTestResult(this.testData2(), totalWeight);
+        final DpTable dp = new DpTable(totalWeight);
+        final long result = dp.calc(this.testData2());
 
         if (!Objects.equals(correct, result))
             fail("correct: " + correct + " / anser:" + result);
@@ -133,9 +130,7 @@ public class DpTableTest {
         final long startTime = System.nanoTime();
 
         final DpTable dp = new DpTable(totalWeight);
-        final ArrayList<Pair> testData = this.testData3();
-        final Integer capacity = testData.size();
-        final long result = dp.calc(capacity, testData);
+        final long result = dp.calc(this.testData3());
 
         final long endTime = System.nanoTime();
 

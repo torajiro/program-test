@@ -54,7 +54,6 @@ public class DpTable {
         for (long i = 0; i <= this.totalWeightLimit; i++) {
             if (this.table.containsKey(i) == false)
                 continue;
-
             Long currentValue = this.table.get(i);
             if (result < currentValue)
                 result = currentValue;
@@ -63,7 +62,8 @@ public class DpTable {
         return result;
     }
 
-    public long calc(Integer capacity, ArrayList<Pair> weightAndValueList) {
+    public long calc(ArrayList<Pair> weightAndValueList) {
+        long capacity = weightAndValueList.size();
         for (int i = 0; i < capacity; i++) {
             final Pair article = weightAndValueList.get(i);
             final Integer weight = article.getWeight();
