@@ -6,35 +6,24 @@ import java.util.Set;
 
 public class DpTable {
 
-    private long totalWeightLimit;
-    private Config config;
     private final Map<Long, Long> table = new HashMap<>();
-    private boolean enableDebug = false;
+    private long totalWeightLimit;
 
-    public DpTable(Config config) {
-        this.config = config;
-        this.init(this.config, false);
+    public DpTable(long totalWeightLimit) {
+        this.init(totalWeightLimit);
     }
 
-    public DpTable(Config config, boolean isDebug) {
-        this.config = config;
-        this.init(this.config, isDebug);
-    }
-
-    private void init(Config config, boolean isDebug) {
-        this.totalWeightLimit = config.getTotalWeight();
-        this.enableDebug = isDebug;
+    private void init(long totalWeightLimit) {
+        this.totalWeightLimit = totalWeightLimit;
         this.table.put(0L, 0L);
     }
 
     private void update(Integer w, Integer v) {
-        if (this.enableDebug)
-            System.out.println(">> weight:" + w + ", value:" + v);
 
         Set<Long> knownData = new HashSet<Long>();
 
         for (long i = 0; i <= this.totalWeightLimit; i++) {
-            long targetWeight = i + w;
+            final long targetWeight = i + w;
 
             if (targetWeight > this.totalWeightLimit)
                 continue;
@@ -45,8 +34,8 @@ public class DpTable {
             if (knownData.contains(i))
                 continue;
 
-            long currentValue = this.table.get(i);
-            long afterValue = currentValue + v;
+            final long currentValue = this.table.get(i);
+            final long afterValue = currentValue + v;
 
             long beforeValue = 0;
             if (this.table.containsKey(targetWeight))
@@ -76,9 +65,9 @@ public class DpTable {
 
     public long calc(Integer capacity, ArrayList<Pair> weightAndValueList) {
         for (int i = 0; i < capacity; i++) {
-            Pair article = weightAndValueList.get(i);
-            Integer weight = article.getWeight();
-            Integer value = article.getValue();
+            final Pair article = weightAndValueList.get(i);
+            final Integer weight = article.getWeight();
+            final Integer value = article.getValue();
             this.update(weight, value);
         }
 

@@ -1,6 +1,6 @@
 public class Pair {
-    private Integer weight;
-    private Integer value;
+    private final Integer weight;
+    private final Integer value;
 
     Pair(Integer w, Integer v) {
         this.weight = w;
